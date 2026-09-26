@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { copy, gradeOptions, isLanguage, languages, programOptions, type Language } from "../../data/site";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = (Astro.params.lang || "sr") as Language;
+if (!isLanguage(lang)) throw new Error("Unsupported language");
+const text = copy[lang];
+---
+
+<BaseLayout lang={lang} title={`${text.applyTitle} | Jelena Jevremović`} description={text.applyIntro}>
+  <main id="main-content" class="page">
+    <section class="card application-card">
+      <span class="section-badge">{text.applyBadge}</span>
+      <h1>{text.applyTitle}</h1>
+      <p class="lead">{text.applyIntro}</p>
+
+      <form
+        class="form"
+        name="application"
+        method="POST"
+        action={`/${lang}/hvala/`}
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value="application" />
+        <input type="hidden" name="language" value={lang} />
+
+        <div>
+          <label for="parent_name">{text.formName}</label>
+          <input id="parent_name" name="parentName" autocomplete="name" required placeholder={text.parentPlaceholder} />
+        </div>
+
+        <div>
+          <label for="student_name">{text.formStudent}</label>
+          <input id="student_name" name="studentName" autocomplete="off" required placeholder={text.studentPlaceholder} />
+        </div>
+
+        <div>
+          <label for="program_type">{text.formProgram}</label>
+          <select id="program_type" name="programType" required>
+            <option value="">{text.selectProgram}</option>
+            {programOptions[lang].map(([value, label]) => <option value={value}>{label}</option>)}
+          </select>
+        </div>
+
+        <div>
+          <label for="child_grade">{text.formGrade}</label>
+          <select id="child_grade" name="childGrade" required>
+            <option value="">{text.selectGrade}</option>
+            {gradeOptions[lang].map(([value, label]) => <option value={value}>{label}</option>)}
+          </select>
+        </div>
+
+        <div>
+          <label for="email">{text.formEmail}</label>
+          <input id="email" name="email" type="email" autocomplete="email" required placeholder={text.emailPlaceholder} />
+        </div>
+
+        <div>
+          <label for="notes">{text.formNotes}</label>
+          <textarea id="notes" name="notes" rows="4" maxlength="2000" placeholder={text.notesPlaceholder}></textarea>
+        </div>
+
+        <label class="consent-label">
+          <input type="checkbox" name="consent" value="yes" required />
+          <span>{text.formConsent}</span>
+        </label>
+
+        <div class="hp-field" aria-hidden="true">
+          <label for="bot-field">Do not fill this out</label>
+          <input id="bot-field" name="bot-field" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button class="cta" type="submit">{text.formSubmit}</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>("[data-netlify='true']");
+    const program = form?.querySelector<HTMLSelectElement>("[name='programType']");
+    const grade = form?.querySelector<HTMLSelectElement>("[name='childGrade']");
+    const rules: Record<string, string[]> = {
+      "dodatna-nastava": ["3-osnovne", "4-osnovne", "5-osnovne", "6-osnovne", "7-osnovne", "8-osnovne"],
+      "mala-matura": ["8-osnovne"],
+      "mg-mentoring": ["8-osnovne"],
+      "velika-matura": ["1-srednje", "2-srednje", "3-srednje", "4-srednje"],
+      "individualni-rad": ["3-osnovne", "4-osnovne", "5-osnovne", "6-osnovne", "7-osnovne", "8-osnovne", "1-srednje", "2-srednje", "3-srednje", "4-srednje"]
+    };
+    const syncGrades = () => {
+      if (!program || !grade) return;
+      const allowed = rules[program.value] || null;
+      Array.from(grade.options).forEach((option, index) => {
+        if (index === 0) return;
+        const visible = !allowed || allowed.includes(option.value);
+        option.hidden = !visible;
+        option.disabled = !visible;
+      });
+      if (allowed?.length === 1) grade.value = allowed[0];
+      if (allowed && grade.value && !allowed.includes(grade.value)) grade.value = "";
+    };
+    const selected = new URLSearchParams(window.location.search).get("program");
+    if (selected && program && Array.from(program.options).some((option) => option.value === selected)) program.value = selected;
+    program?.addEventListener("change", syncGrades);
+    syncGrades();
+  </script>
+</BaseLayout>

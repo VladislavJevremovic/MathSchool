@@ -1,0 +1,43 @@
+---
+import type { Language, ProgramSlug } from "../data/site";
+import { copy, locales, otherLanguage, programs } from "../data/site";
+import { Image } from "astro:assets";
+import logo from "../assets/logo.png";
+
+interface Props {
+  lang: Language;
+  pathname: string;
+}
+
+const { lang, pathname } = Astro.props;
+const text = copy[lang];
+const alternateLanguage = otherLanguage(lang);
+const currentPath = pathname === "/" ? `/${lang}/` : pathname;
+const alternatePath = currentPath.replace(/^\/(sr|en)(?=\/|$)/, `/${alternateLanguage}`);
+const programPath = `/${lang}/program`;
+const programLinks: ProgramSlug[] = ["dodatna-nastava", "mala-matura", "velika-matura", "mg-mentoring"];
+---
+
+<header class="topbar">
+  <a class="brand" href={`/${lang}/`} aria-label="Jelena Jevremović">
+    <Image class="brand-logo" src={logo} alt="Jelena Jevremović logo" format="webp" width={460} densities={[1, 2]} />
+  </a>
+  <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-nav" aria-label={text.menu}>
+    <span data-menu-label>{text.menu}</span>
+  </button>
+  <nav id="site-nav" class="nav" aria-label={text.navLabel}>
+    <a href={`/${lang}/`}>{text.navHome}</a>
+    <details class="nav-dropdown">
+      <summary class="nav-dropdown-toggle">{text.navPrograms}</summary>
+      <div class="nav-dropdown-menu">
+        {programLinks.map((slug) => <a href={`${programPath}/${slug}/`}>{programs[slug].title[lang]}</a>)}
+        <a href={`/${lang}/apply/?program=individualni-rad`}>{text.navIndividual}</a>
+      </div>
+    </details>
+    <a href={`/${lang}/apply/`}>{text.navApply}</a>
+  </nav>
+  <div class="lang-switcher" role="group" aria-label={text.langSwitcherLabel}>
+    <a class:list={["lang-btn", { active: lang === "sr" }]} href={lang === "sr" ? currentPath : alternatePath}>{locales.sr.label}</a>
+    <a class:list={["lang-btn", { active: lang === "en" }]} href={lang === "en" ? currentPath : alternatePath}>{locales.en.label}</a>
+  </div>
+</header>

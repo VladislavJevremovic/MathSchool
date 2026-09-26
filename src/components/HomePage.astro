@@ -1,0 +1,97 @@
+---
+import type { Language, ProgramSlug } from "../data/site";
+import { copy, programs } from "../data/site";
+import { Image } from "astro:assets";
+import profile from "../assets/profile.png";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProgramCard from "./ProgramCard.astro";
+
+const { lang } = Astro.props as { lang: Language };
+const text = copy[lang];
+const heroProgramLinks: ProgramSlug[] = ["dodatna-nastava", "mala-matura", "velika-matura", "mg-mentoring"];
+const cardPrograms = ["dodatna-nastava", "mala-matura", "mg-mentoring"] as const;
+---
+
+<BaseLayout lang={lang}>
+  <main id="main-content">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-card">
+          <div>
+            <p class="hero-badge">{text.heroBadge}</p>
+            <h1 class="hero-title">{text.heroTitle}</h1>
+            <div class="hero-services">
+              <ul>
+                {text.heroServices.map((service) => <li>{service}</li>)}
+              </ul>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <a class="cta" href={`/${lang}/apply/`}>{text.applyCta}</a>
+            <details class="hero-dropdown">
+              <summary class="cta secondary">{text.exploreCta}</summary>
+              <div class="hero-dropdown-menu">
+                {heroProgramLinks.map((slug) => <a href={`/${lang}/program/${slug}/`}>{programs[slug].title[lang]}</a>)}
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <aside class="hero-profile card">
+          <div class="founder-image-wrapper">
+            <Image
+              class="founder-image hero-image"
+              src={profile}
+              alt={text.founderImageAlt}
+              format="webp"
+              widths={[190, 380]}
+              sizes="(max-width: 720px) 160px, 190px"
+            />
+          </div>
+          <p class="hero-profile-name">{text.founderName}</p>
+          <div class="hero-metrics">
+            {text.metrics.map((metric) => <span>{metric}</span>)}
+          </div>
+          <p class="hero-quote">{text.quote}</p>
+          <p class="hero-quote-sub">{text.quoteSub}</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="founder card">
+      <div>
+        <span class="section-badge">{text.founderBadge}</span>
+        <h2>{text.aboutTitle}</h2>
+        <p class="founder-role">{text.founderRole}</p>
+        <p class="founder-name">{text.founderName}</p>
+        <div class="founder-highlights">
+          {text.highlights.map(([title, description, icon]) => (
+            <div class="highlight-box">
+              <div class="highlight-box-icon" aria-hidden="true">{icon}</div>
+              <h3 class="highlight-box-title">{title}</h3>
+              <p class="highlight-box-desc">{description}</p>
+            </div>
+          ))}
+        </div>
+        {text.about.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </section>
+
+    <section class="grid two">
+      <article class="card">
+        <span class="section-badge">{text.audienceBadge}</span>
+        <h2>{text.audienceTitle}</h2>
+        <p>{text.audienceText}</p>
+      </article>
+      <article class="card">
+        <span class="section-badge">{text.resultsBadge}</span>
+        <h2>{text.resultsTitle}</h2>
+        <p>{text.resultsText}</p>
+      </article>
+    </section>
+
+    <section class="grid three">
+      {cardPrograms.map((slug) => <ProgramCard lang={lang} slug={slug} text={programs[slug].card[lang]} />)}
+    </section>
+  </main>
+</BaseLayout>

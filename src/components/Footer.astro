@@ -1,0 +1,12 @@
+---
+import type { Language } from "../data/site";
+import { copy } from "../data/site";
+
+const { lang } = Astro.props;
+const text = copy[lang as Language];
+---
+
+<footer class="footer">
+  <p>{text.footer}</p>
+  <a href={`/${lang}/privacy/`}>{text.privacy}</a>
+</footer>

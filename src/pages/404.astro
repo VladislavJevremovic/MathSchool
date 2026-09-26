@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { copy } from "../data/site";
+
+const sr = copy.sr;
+const en = copy.en;
+---
+
+<BaseLayout lang="sr" title={`404 — ${sr.notFoundTitle} | Jelena Jevremović`} description={sr.notFoundText} noindex>
+  <main id="main-content" class="page">
+    <section class="card additional-program-page">
+      <span class="section-badge">404</span>
+      <h1>{sr.notFoundTitle}</h1>
+      <p>{sr.notFoundText}</p>
+      <p lang="en">{en.notFoundText}</p>
+      <div class="hero-actions">
+        <a class="cta" href="/sr/">{sr.navHome}</a>
+        <a class="cta secondary" href="/en/">{en.navHome}</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

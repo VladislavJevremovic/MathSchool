@@ -1,0 +1,19 @@
+---
+import type { Language, ProgramSlug } from "../data/site";
+import { copy, programs } from "../data/site";
+
+interface Props {
+  lang: Language;
+  slug: ProgramSlug;
+  text: string;
+}
+
+const { lang, slug, text } = Astro.props;
+const program = programs[slug];
+---
+
+<article class="card">
+  <h2>{program.title[lang]}</h2>
+  <p>{text}</p>
+  <a class="cta secondary program-card-cta" href={`/${lang}/program/${slug}/`}>{copy[lang].learnMore}</a>
+</article>

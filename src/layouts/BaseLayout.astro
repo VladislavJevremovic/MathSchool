@@ -1,0 +1,128 @@
+---
+import type { Language } from "../data/site";
+import { copy, locales, otherLanguage } from "../data/site";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
+
+interface Props {
+  lang: Language;
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { lang, title = copy[lang].siteTitle, description = copy[lang].siteDescription, noindex = false } = Astro.props;
+
+const site = Astro.site ?? new URL("https://jelenajevremovic.com");
+const canonical = new URL(Astro.url.pathname, site);
+const alternateLanguage = otherLanguage(lang);
+const alternatePath = Astro.url.pathname.replace(/^\/(sr|en)(?=\/|$)/, `/${alternateLanguage}`);
+const alternate = new URL(alternatePath, site);
+const htmlLang = locales[lang].htmlLang;
+const alternateHtmlLang = locales[alternateLanguage].htmlLang;
+const ogImage = new URL("/og.png", site);
+const ogLocale = locales[lang].ogLocale;
+const alternateOgLocale = locales[alternateLanguage].ogLocale;
+const menuLabel = copy[lang].menu;
+const menuLabelOpen = copy[lang].closeMenu;
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b192c" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical.href} />
+    {!noindex && <link rel="alternate" hreflang={htmlLang} href={canonical.href} />}
+    {!noindex && <link rel="alternate" hreflang={alternateHtmlLang} href={alternate.href} />}
+    {!noindex && <link rel="alternate" hreflang="x-default" href={lang === "sr" ? canonical.href : alternate.href} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={copy[lang].siteTitle} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={alternateOgLocale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.href} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{copy[lang].skip}</a>
+    <Header lang={lang} pathname={Astro.url.pathname} />
+    <slot />
+    <Footer lang={lang} />
+    <script is:inline define:vars={{ menuLabel, menuLabelOpen }}>
+      let closeCurrentMenu = () => {};
+      let globalListenersInitialized = false;
+
+      function initializeNavigation() {
+        const header = document.querySelector(".topbar");
+        const toggle = document.querySelector("[data-menu-toggle]");
+        const nav = document.querySelector("#site-nav");
+
+        if (header && toggle && nav && !toggle.dataset.initialized) {
+          toggle.dataset.initialized = "true";
+          const setOpen = (open) => {
+            header.classList.toggle("menu-open", open);
+            toggle.setAttribute("aria-expanded", String(open));
+            toggle.setAttribute("aria-label", open ? menuLabelOpen : menuLabel);
+            const label = toggle.querySelector("[data-menu-label]");
+            if (label) label.textContent = open ? menuLabelOpen : menuLabel;
+          };
+          toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+          nav.addEventListener("click", (event) => {
+            if (event.target.closest("a")) setOpen(false);
+          });
+          closeCurrentMenu = () => setOpen(false);
+        }
+
+        document.querySelectorAll(".nav-dropdown, .hero-dropdown").forEach((dropdown) => {
+          if (dropdown.dataset.initialized) return;
+          dropdown.dataset.initialized = "true";
+          dropdown.addEventListener("toggle", () => {
+            if (!dropdown.open) return;
+            document.querySelectorAll(".nav-dropdown, .hero-dropdown").forEach((other) => {
+              if (other !== dropdown) other.removeAttribute("open");
+            });
+          });
+        });
+
+        if (globalListenersInitialized) return;
+        globalListenersInitialized = true;
+        document.addEventListener("click", (event) => {
+          if (event.target instanceof Element && !event.target.closest(".topbar")) closeCurrentMenu();
+          if (event.target instanceof Element && !event.target.closest(".nav-dropdown, .hero-dropdown")) {
+            document.querySelectorAll(".nav-dropdown, .hero-dropdown").forEach((dropdown) => dropdown.removeAttribute("open"));
+          }
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key !== "Escape") return;
+          closeCurrentMenu();
+          document.querySelectorAll(".nav-dropdown, .hero-dropdown").forEach((dropdown) => dropdown.removeAttribute("open"));
+        });
+      }
+
+      document.addEventListener("astro:page-load", initializeNavigation);
+      initializeNavigation();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { copy, isLanguage, languages, programs, type Language, type ProgramSlug } from "../../../data/site";
+
+export function getStaticPaths() {
+  return languages.flatMap((lang) => Object.keys(programs).map((slug) => ({ params: { lang, slug } })));
+}
+
+const lang = (Astro.params.lang || "sr") as Language;
+const slug = (Astro.params.slug || "dodatna-nastava") as ProgramSlug;
+if (!isLanguage(lang) || !programs[slug]) throw new Error("Unsupported program route");
+
+const text = copy[lang];
+const program = programs[slug] as any;
+const title = `${program.title[lang]} | Jelena Jevremović`;
+---
+
+<BaseLayout lang={lang} title={title} description={program.intro[lang]}>
+  <main id="main-content" class="page">
+    <section class="grid programs-grid">
+      <article class="card additional-program-page">
+        <span class="section-badge">{program.badge[lang]}</span>
+        <h1>{program.title[lang]}</h1>
+        <p>{program.intro[lang]}</p>
+
+        {program.secondIntro && <p>{program.secondIntro[lang]}</p>}
+
+        {slug === "dodatna-nastava" && (
+          <>
+            <h2>{program.workTitle[lang]}</h2>
+            <p>{program.workIntro[lang]}</p>
+            <ul>{program.topics[lang].map((item: string) => <li>{item}</li>)}</ul>
+
+            <h2>{program.focusTitle[lang]}</h2>
+            <ul>{program.focus[lang].map((item: string) => <li>{item}</li>)}</ul>
+
+            <h2>{program.structureTitle[lang]}</h2>
+            {program.structure[lang].map((paragraph: string) => <p>{paragraph}</p>)}
+
+            <h2>{program.durationTitle[lang]}</h2>
+            <ul>{program.duration[lang].map((item: string) => <li>{item}</li>)}</ul>
+
+            <h2>{program.formatTitle[lang]}</h2>
+            {program.format[lang].map((paragraph: string) => <p>{paragraph}</p>)}
+
+            <h2>{program.outcomesTitle[lang]}</h2>
+            <ul>{program.outcomes[lang].map((item: string) => <li>{item}</li>)}</ul>
+
+            <h2>{program.expectationsTitle[lang]}</h2>
+            <ul>{program.expectations[lang].map((item: string) => <li>{item}</li>)}</ul>
+            <p class="program-closing-note">{program.closing[lang]}</p>
+
+            <h2>{program.priceTitle[lang]}</h2>
+            <p>{program.priceIntro[lang]}</p>
+            <div class="pricing-grid">
+              {program.prices[lang].map((price: string[]) => (
+                <article class="pricing-card">
+                  <h3>{price[0]}</h3>
+                  <div class="price-rsd">{price[1]}</div>
+                  <div class="price-eur">{price[2]}</div>
+                  <div class="class-details">{price[3]}</div>
+                </article>
+              ))}
+            </div>
+            <p>{program.priceNote[lang]}</p>
+          </>
+        )}
+
+        {slug === "mala-matura" && (
+          <>
+            <ul class="program-key-points">{program.points[lang].map((item: string) => <li>{item}</li>)}</ul>
+            <p>{program.body[lang]}</p>
+            <p class="program-closing-note">{program.closing[lang]}</p>
+            <h2>{program.priceTitle[lang]}</h2>
+            <p>{program.price[lang]}</p>
+            <h2>{program.noteTitle[lang]}</h2>
+            <p>{program.note[lang]}</p>
+          </>
+        )}
+
+        <a class="cta apply-cta" href={`/${lang}/apply/?program=${slug}`}>{text.applyCta}</a>
+      </article>
+    </section>
+  </main>
+</BaseLayout>
