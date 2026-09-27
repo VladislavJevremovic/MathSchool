@@ -92,23 +92,17 @@ body {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  transition: transform 0.2s ease;
 }
 
 .brand picture {
   display: block;
 }
 
-.brand:hover {
-  transform: scale(1.02);
-}
-
 .brand-logo {
   width: min(230px, 42vw);
   height: auto;
   display: block;
-  mix-blend-mode: multiply;
-  filter: contrast(1.04) brightness(0.98);
+  background: #ffffff;
 }
 
 .nav {
@@ -219,7 +213,6 @@ body {
 .nav-dropdown-menu a:hover {
   background: var(--primary-light);
   color: var(--primary-brand);
-  transform: translateX(4px);
 }
 
 /* Language Switcher */
@@ -310,7 +303,7 @@ p:last-child {
   border: 1px solid var(--line-light);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .hero-card {
@@ -465,13 +458,8 @@ p:last-child {
 }
 
 .cta:hover {
-  transform: translateY(-2px);
   box-shadow: 0 8px 22px rgba(11, 25, 44, 0.3);
   background: linear-gradient(135deg, #172a45, #2563eb);
-}
-
-.cta:active {
-  transform: translateY(0);
 }
 
 .cta.secondary {
@@ -529,7 +517,6 @@ p:last-child {
 .hero-dropdown-menu a:hover {
   background: var(--primary-light);
   color: var(--primary-brand);
-  transform: translateX(4px);
 }
 
 /* Hero Profile Sidebar */
@@ -642,7 +629,6 @@ p:last-child {
 }
 
 .card:hover {
-  transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
   border-color: rgba(30, 58, 138, 0.2);
 }
@@ -713,7 +699,6 @@ p:last-child {
 
 .highlight-box:hover {
   border-color: var(--gold-warm);
-  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
@@ -761,65 +746,6 @@ p:last-child {
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   margin: 1.5rem 0;
   font-weight: 500;
-}
-
-/* Pricing Grid */
-.pricing-grid {
-  margin-top: 1.25rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-}
-
-.pricing-card {
-  border: 1px solid var(--line-light);
-  border-radius: var(--radius-md);
-  background: #ffffff;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.pricing-card:hover {
-  border-color: var(--gold-warm);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.pricing-card h3 {
-  margin: 0 0 0.6rem;
-  font-family: var(--font-sans);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--primary-deep);
-}
-
-.pricing-card .price-rsd {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--primary-brand);
-  margin-bottom: 0.1rem;
-}
-
-.pricing-card .price-eur {
-  font-size: 0.9rem;
-  color: var(--ink-muted);
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-
-.pricing-card .class-details {
-  font-size: 0.85rem;
-  color: var(--ink-body);
-  background: var(--line-subtle);
-  border-radius: var(--radius-sm);
-  padding: 0.4rem 0.6rem;
-  font-weight: 600;
 }
 
 .apply-cta {

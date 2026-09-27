@@ -49,20 +49,6 @@ const title = `${program.title[lang]} | Jelena Jevremović`;
             <h2>{program.expectationsTitle[lang]}</h2>
             <ul>{program.expectations[lang].map((item: string) => <li>{item}</li>)}</ul>
             <p class="program-closing-note">{program.closing[lang]}</p>
-
-            <h2>{program.priceTitle[lang]}</h2>
-            <p>{program.priceIntro[lang]}</p>
-            <div class="pricing-grid">
-              {program.prices[lang].map((price: string[]) => (
-                <article class="pricing-card">
-                  <h3>{price[0]}</h3>
-                  <div class="price-rsd">{price[1]}</div>
-                  <div class="price-eur">{price[2]}</div>
-                  <div class="class-details">{price[3]}</div>
-                </article>
-              ))}
-            </div>
-            <p>{program.priceNote[lang]}</p>
           </>
         )}
 
@@ -71,10 +57,6 @@ const title = `${program.title[lang]} | Jelena Jevremović`;
             <ul class="program-key-points">{program.points[lang].map((item: string) => <li>{item}</li>)}</ul>
             <p>{program.body[lang]}</p>
             <p class="program-closing-note">{program.closing[lang]}</p>
-            <h2>{program.priceTitle[lang]}</h2>
-            <p>{program.price[lang]}</p>
-            <h2>{program.noteTitle[lang]}</h2>
-            <p>{program.note[lang]}</p>
           </>
         )}
 

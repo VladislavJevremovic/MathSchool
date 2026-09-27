@@ -22,7 +22,7 @@ const text = copy[lang];
         class="form"
         name="application"
         method="POST"
-        action={`/${lang}/hvala/`}
+        action={`/${lang}/thank-you/`}
         data-netlify="true"
         netlify-honeypot="bot-field"
       >
@@ -36,7 +36,7 @@ const text = copy[lang];
 
         <div>
           <label for="student_name">{text.formStudent}</label>
-          <input id="student_name" name="studentName" autocomplete="off" required placeholder={text.studentPlaceholder} />
+          <input id="student_name" name="studentName" autocomplete="off" placeholder={text.studentPlaceholder} />
         </div>
 
         <div>

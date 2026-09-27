@@ -12,7 +12,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) => page !== `${SITE}/` && !page.endsWith("/hvala/"),
+      filter: (page) => page !== `${SITE}/` && !page.endsWith("/thank-you/"),
       i18n: {
         defaultLocale: "sr",
         locales: {
