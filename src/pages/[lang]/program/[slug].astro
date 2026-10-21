@@ -37,12 +37,6 @@ const title = `${program.title[lang]} | Jelena Jevremović`;
             <h2>{program.structureTitle[lang]}</h2>
             {program.structure[lang].map((paragraph: string) => <p>{paragraph}</p>)}
 
-            <h2>{program.durationTitle[lang]}</h2>
-            <ul>{program.duration[lang].map((item: string) => <li>{item}</li>)}</ul>
-
-            <h2>{program.formatTitle[lang]}</h2>
-            {program.format[lang].map((paragraph: string) => <p>{paragraph}</p>)}
-
             <h2>{program.outcomesTitle[lang]}</h2>
             <ul>{program.outcomes[lang].map((item: string) => <li>{item}</li>)}</ul>
 
@@ -52,9 +46,12 @@ const title = `${program.title[lang]} | Jelena Jevremović`;
           </>
         )}
 
+        {program.points && (
+          <ul class="program-key-points">{program.points[lang].map((item: string) => <li>{item}</li>)}</ul>
+        )}
+
         {slug === "mala-matura" && (
           <>
-            <ul class="program-key-points">{program.points[lang].map((item: string) => <li>{item}</li>)}</ul>
             <p>{program.body[lang]}</p>
             <p class="program-closing-note">{program.closing[lang]}</p>
           </>
