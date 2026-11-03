@@ -47,7 +47,7 @@ export const copy = {
     ],
     applyCta: "Prijavite dete",
     exploreCta: "Pogledajte programe",
-    founderName: "Jelena Jevremović, master matematike",
+    founderName: "Jelena Jevremović, master matematičar",
     founderBadge: "Osnivač i predavač",
     founderRole: "Osnivač i nosilac obrazovnog programa",
     metrics: ["10+ god. rada sa nadarenim učenicima", "20+ god. iskustva"],
@@ -281,7 +281,7 @@ export const programs = {
   },
   "mg-7-razred": {
     badge: { sr: "Specijalizovani program", en: "Specialized program" },
-    title: { sr: "Pripreme za upis u VII razred pri Matematičkoj gimnaziji", en: "Preparation for 7th Grade at Mathematical Grammar School" },
+    title: { sr: "Pripreme za upis u VII razred osnovne škole pri Matematičkoj gimnaziji", en: "Preparation for 7th Grade of Primary School at Mathematical Grammar School" },
     card: { sr: "Sistematska priprema za specifičan prijemni ispit za osnovnu školu pri Matematičkoj gimnaziji.", en: "Systematic preparation for the specific entrance exam for the primary school at the Mathematical Grammar School." },
     intro: { sr: "Temeljan rad prilagođen učenicima VI razreda koji se pripremaju za rani upis u posebno odeljenje Matematičke gimnazije. Fokus je na naprednim logičkim i kombinatornim zadacima.", en: "Thorough work adapted for 6th-grade students preparing for early admission to the special department of the Mathematical Grammar School. The focus is on advanced logical and combinatorial problems." }
   },
@@ -332,7 +332,7 @@ export const programOptions: Record<Language, Array<[ProgramSlug, string]>> = {
     ["dodatna-nastava", "Dodatna nastava za osnovnu školu"],
     ["mala-matura", "Pripreme za završni ispit"],
     ["srednjoskolci", "Rad sa srednjoškolcima"],
-    ["mg-7-razred", "Pripreme za upis u VII razred pri Matematičkoj gimnaziji"],
+    ["mg-7-razred", "Pripreme za upis u VII razred osnovne škole pri Matematičkoj gimnaziji"],
     ["mg-mentoring", "Pripreme za upis u Matematičku gimnaziju"],
     ["individualni-rad", "Individualni rad"]
   ],
@@ -340,7 +340,7 @@ export const programOptions: Record<Language, Array<[ProgramSlug, string]>> = {
     ["dodatna-nastava", "Primary School Mathematics Enrichment"],
     ["mala-matura", "Final Exam Preparation"],
     ["srednjoskolci", "Secondary School Mentoring"],
-    ["mg-7-razred", "Preparation for 7th Grade at Mathematical Grammar School"],
+    ["mg-7-razred", "Preparation for 7th Grade of Primary School at Mathematical Grammar School"],
     ["mg-mentoring", "Mathematical Grammar School Preparation"],
     ["individualni-rad", "Individual Mentoring"]
   ]
